@@ -1,0 +1,1 @@
+// Aquí va tu script.js (sin cambios por ahora, puedes usar el tuyo actual)

@@ -1,0 +1,179 @@
+
+/* HEY DIGI - Estilo Arcade Retro */
+:root {
+  --fondo-oscuro: #1c003b;
+  --fondo-morado: linear-gradient(180deg, #2b0063, #11001d);
+  --texto-blanco: #ffffff;
+  --violeta: #8e2de2;
+  --rosa: #da22ff;
+  --rojo: #ff4b5c;
+  --amarillo: #ffe600;
+}
+body {
+  font-family: 'Press Start 2P', monospace;
+  
+background: linear-gradient(180deg, #2b0063 0%, #2a0061 30%, #1c003b 60%, #11001d 100%);
+background-attachment: fixed;
+background-repeat: no-repeat;
+background-size: 100% 200vh;
+
+  color: var(--texto-blanco);
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  background: linear-gradient(to bottom, #d10010, #a1000c);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.logo img {
+  height: 100px;
+  margin-top: 4px;
+}
+.search-icon img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
+.encabezado {
+  padding: 40px 24px 0;
+  text-align: center;
+}
+.encabezado h1 {
+  font-size: 18px;
+  color: var(--amarillo);
+  margin-bottom: 12px;
+}
+.subtexto {
+  font-size: 12px;
+  color: var(--texto-blanco);
+  line-height: 1.8;
+}
+main {
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+.pack {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--violeta);
+  border-radius: 16px;
+  padding: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.pack:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px var(--rosa);
+}
+.pack img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.pack h2 {
+  font-size: 14px;
+  color: var(--amarillo);
+  margin-bottom: 8px;
+}
+.pack ul li {
+  font-size: 10px;
+  margin-left: 16px;
+  margin-bottom: 6px;
+  list-style: square;
+}
+.compatibilidad h4,
+.seccion-precio h4 {
+  font-size: 12px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+.badge-console {
+  background-color: #000;
+  border: 1px solid var(--violeta);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-right: 6px;
+  display: inline-block;
+  font-size: 10px;
+  color: var(--texto-blanco);
+}
+.seccion-precio .precio {
+  font-size: 14px;
+  color: var(--amarillo);
+  font-weight: bold;
+}
+.search-panel {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  background-color: #2b0063;
+  padding: 20px;
+  transition: top 0.3s ease;
+  z-index: 9999;
+  color: white;
+}
+.search-panel.visible {
+  top: 0;
+}
+.search-panel h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--amarillo);
+}
+.input-icono input {
+  background-color: #1a0033;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 8px 12px 8px 36px;
+  border-radius: 8px;
+  font-family: 'Press Start 2P';
+  font-size: 10px;
+}
+.input-icono img {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: 0.6;
+  top: 10px;
+}
+.btn-purple {
+  background-color: var(--violeta);
+  color: white;
+  padding: 10px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 10px;
+  font-family: 'Press Start 2P';
+}
+.btn-red {
+  background-color: var(--rojo);
+  color: white;
+  padding: 10px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 10px;
+  font-family: 'Press Start 2P';
+}
+.close-btn img {
+  width: 28px;
+  height: 28px;
+  filter: invert(100%);
+}
+.search-hint p {
+  font-size: 10px;
+  margin: 4px 0;
+  color: #ccc;
+}
