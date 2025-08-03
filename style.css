@@ -247,10 +247,9 @@ main {
 
 .seccion-precio-boton {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   margin-top: 16px;
-  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -282,6 +281,10 @@ main {
   text-decoration: none;
   box-shadow: 0 0 10px var(--verde-wsp);
   transition: transform 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .btn-wsp:hover {
