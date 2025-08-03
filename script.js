@@ -46,7 +46,7 @@ function mostrarPacks(packs) {
 
 // Cargar datos
 Papa.parse(
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFDTOUDh0yCwUYO2LN4IzFbMFudjZG-CnogJDGQvhQfDpL3C1s6Y3iLJ78ra4S-iDZjPLPjP44mcB4/pub?output=csv",
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFDTOUDh0yCwUYO2LN4IzFbMFudjZG-CnogJDGQvhQfDpL3C1s6Y3iLJ78ra4S-iDZjPLPjP44mcB4/pub?gid=1067481021&single=true&output=csv",
   {
     download: true,
     header: true,
