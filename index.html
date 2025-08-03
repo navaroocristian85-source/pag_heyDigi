@@ -3,45 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hey Digi - Ejemplo Texto</title>
+  <title>Hey Digi - Juegos Digitales</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">
-      <img src="logo_hey.png" alt="Hey Digi" />
+
+  <!-- 🧩 Barra flotante con logo, lupa y buscador integrado -->
+  <header class="navbar-floating">
+    <div class="navbar-content" id="barraFlotante">
+
+    <div class="superior-navbar">
+      <div class="logo">
+        <img src="logo_hey.png" alt="Hey Digi" />
+      </div>
+
+      <div class="search-wrapper">
+        <button class="search-icon" id="searchIcon" aria-label="Buscar">
+          <img src="magnifyingglass.svg" alt="Buscar" />
+        </button>
+      </div>
     </div>
-    <button class="search-icon" id="searchIcon" aria-label="Buscar">
-      <img src="magnifyingglass.svg" alt="Buscar" />
-    </button>
+
+
+      <!-- Buscador desplegable dentro de la barra -->
+      <div class="buscador-dropdown" id="buscadorDropdown">
+        <h2>Buscardor de juegos</h2>
+
+        <label for="filtroNombre">Buscar por nombre:</label>
+        <input type="text" id="filtroNombre" placeholder="Ej: Mario, Zelda" />
+
+        <label for="filtroConsola">Consola:</label>
+        <select id="filtroConsola">
+          <option value="">Todas</option>
+          <option>Nintendo Switch</option>
+        </select>
+
+        <label for="filtroPrecio">Precio máximo (CLP):</label>
+        <input type="number" id="filtroPrecio" placeholder="Ej: 25000" />
+
+        <div class="botones-busqueda">
+          <button class="btn-purple" id="aplicarFiltros">Aplicar</button>
+          <button class="btn-red" id="limpiarFiltros">Limpiar</button>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <section class="encabezado">
-    <h1>🎮 ¡Bienvenido a Hey Digi!</h1>
-    <p class="subtexto">Juegos digitales, contenido descargable (DLC) y suscripciones para Nintendo Switch™</p>
-  </section>
+<section class="encabezado">
+  <h1>¡Hey Digi está encendido!</h1>
+  <p class="subtexto">Desbloquea horas de diversión con los mejores juegos digitales para Nintendo Switch™.</p>
+  <p class="linea-extra">✨ Actualizado a diario – Packs limitados ✨</p>
+</section>
 
-  <main>
-    
-<div class="pack">
-  <h2>Pack Nº 101</h2>
-  <p><strong>Juegos incluidos:</strong></p>
-  <ul>
-    <li>Super Mario Odyssey</li>
-    <li>Mario Kart 8 Deluxe</li>
-    <li>Luigi's Mansion 3</li>
-  </ul>
-  <div class="compatibilidad">
-    <h4>Compatibilidad</h4>
-    <span class="badge-console">Nintendo Switch</span>
-  </div>
-  <div class="seccion-precio">
-    <h4>Precio</h4>
-    <p class="precio">$12.000 CLP</p>
-  </div>
-</div>
+  <main id="catalogo"></main>
 
-  </main>
+  <!-- Librería PapaParse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- Script personalizado -->
+  <script src="script.js"></script>
+
 </body>
 </html>
