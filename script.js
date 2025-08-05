@@ -1,26 +1,28 @@
 const catalogo = document.getElementById("catalogo");
 let datosOriginales = [];
 
-// Mostrar packs
 function mostrarPacks(packs) {
   catalogo.innerHTML = "";
   packs.forEach(pack => {
-    if ((pack["estado"] || "").trim().toLowerCase() !== "disponible") return;
+    const tienePrecio = !isNaN(Number(pack["Precio CLP"]));
+    const tieneConsola = (pack["Consola"] || "").trim() !== "";
+
+    if (!tienePrecio || !tieneConsola) return;
 
     const div = document.createElement("div");
     div.className = "pack";
 
-    const consolas = pack["consola"]
-      ? pack["consola"].split('\n').map(c => `<span class="badge-console">${c.trim()}</span>`).join(' ')
+    const consolas = pack["Consola"]
+      ? pack["Consola"].split(',').map(c => `<span class="badge-console">${c.trim()}</span>`).join(' ')
       : '<span class="badge-console">No especificada</span>';
 
     const packData = encodeURIComponent(JSON.stringify(pack));
 
     div.innerHTML = `
-      <h2>Pack N°${pack["pack ID"]}</h2>
+      <h2>Pack N°${pack["Pack ID"]}</h2>
       <p><strong>Juegos incluidos:</strong></p>
       <ul>
-        ${(pack["juegos incluidos"] ?? "")
+        ${(pack["Juegos Incluidos"] ?? "")
           .split('\n')
           .map(j => `<li>${j.trim()}</li>`)
           .join("")}
@@ -32,7 +34,7 @@ function mostrarPacks(packs) {
       <div class="seccion-precio-boton">
         <div class="info-precio">
           <h4>Precio</h4>
-          <p class="precio">$${Number(pack["precio"]).toLocaleString("es-CL")} CLP</p>
+          <p class="precio">$${Number(pack["Precio CLP"]).toLocaleString("es-CL")} CLP</p>
         </div>
         <a href="#" class="btn-wsp" data-pack='${packData}'>
           <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="wsp-icon">
@@ -44,7 +46,6 @@ function mostrarPacks(packs) {
   });
 }
 
-// Cargar datos
 Papa.parse(
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFDTOUDh0yCwUYO2LN4IzFbMFudjZG-CnogJDGQvhQfDpL3C1s6Y3iLJ78ra4S-iDZjPLPjP44mcB4/pub?gid=1135075618&single=true&output=csv",
   {
@@ -53,11 +54,32 @@ Papa.parse(
     complete: function (results) {
       datosOriginales = results.data;
       mostrarPacks(datosOriginales);
+      cargarOpcionesConsola(); // ← Agregado para autocompletar el filtro
     }
   }
 );
 
-// Controlar apertura y cierre de buscador
+function cargarOpcionesConsola() {
+  const selectConsola = document.getElementById("filtroConsola");
+  const consolasUnicas = new Set();
+
+  datosOriginales.forEach(pack => {
+    const consola = pack["Consola"] || "";
+    consola.split(",").forEach(c => {
+      const limpia = c.trim();
+      if (limpia) consolasUnicas.add(limpia);
+    });
+  });
+
+  selectConsola.innerHTML = `<option value="">Todas</option>`;
+  [...consolasUnicas].sort().forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    selectConsola.appendChild(opt);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const lupa = document.getElementById("searchIcon");
   const dropdown = document.getElementById("buscadorDropdown");
@@ -82,11 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const precio = parseInt(document.getElementById("filtroPrecio").value);
 
     const filtrados = datosOriginales.filter(pack => {
-      const nombreIncluye = pack["juegos incluidos"]?.toLowerCase().includes(nombre);
-      const consolaIncluye = consola === "" || pack["consola"]?.toLowerCase().includes(consola);
-      const precioValido = isNaN(precio) || Number(pack["precio"]) <= precio;
-      const disponible = (pack["estado"] || "").toLowerCase() === "disponible";
-      return nombreIncluye && consolaIncluye && precioValido && disponible;
+      const nombreIncluye = (pack["Juegos Incluidos"] || "").toLowerCase().includes(nombre);
+      const consolaIncluye = consola === "" || (pack["Consola"] || "").toLowerCase().includes(consola);
+      const precioValido = isNaN(precio) || Number(pack["Precio CLP"]) <= precio;
+      const tienePrecio = !isNaN(Number(pack["Precio CLP"]));
+      const tieneConsola = (pack["Consola"] || "").trim() !== "";
+      return nombreIncluye && consolaIncluye && precioValido && tieneConsola && tienePrecio;
     });
 
     mostrarPacks(filtrados);
@@ -101,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Comprar por WhatsApp
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".btn-wsp");
   if (!btn) return;
@@ -109,9 +131,9 @@ document.addEventListener("click", function (e) {
   e.preventDefault();
 
   const pack = JSON.parse(decodeURIComponent(btn.getAttribute("data-pack")));
-  const mensaje = `Hola! 👋 Me interesa el Pack N°${pack["pack ID"]} que vi en la página.\n\nJuegos incluidos:\n${pack["juegos incluidos"]}\n\nPrecio: $${Number(pack["precio"]).toLocaleString("es-CL")} CLP`;
+  const mensaje = `Hola! 👋 Me interesa el Pack N°${pack["Pack ID"]} que vi en la página.\n\nJuegos incluidos:\n${pack["Juegos Incluidos"]}\n\nPrecio: $${Number(pack["Precio CLP"]).toLocaleString("es-CL")} CLP`;
 
-  const numeroWsp = "56941347576"; // Cambia esto si es necesario
+  const numeroWsp = "56941347576";
   const link = `https://wa.me/${numeroWsp}?text=${encodeURIComponent(mensaje)}`;
   window.open(link, "_blank");
 });
