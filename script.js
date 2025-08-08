@@ -104,11 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const precio = parseInt(document.getElementById("filtroPrecio").value);
 
     const filtrados = datosOriginales.filter(pack => {
-      const nombreIncluye = (pack["Juegos Incluidos"] || "").toLowerCase().includes(nombre);
-      const consolaIncluye = consola === "" || (pack["Consola"] || "").toLowerCase().includes(consola);
-      const precioValido = isNaN(precio) || Number(pack["Precio CLP"]) <= precio;
+      const juegos = (pack["Juegos Incluidos"] || "").toLowerCase();
+      const consolaTexto = (pack["Consola"] || "").toLowerCase();
       const tienePrecio = !isNaN(Number(pack["Precio CLP"]));
-      const tieneConsola = (pack["Consola"] || "").trim() !== "";
+      const tieneConsola = consolaTexto.trim() !== "";
+      const precioValido = isNaN(precio) || Number(pack["Precio CLP"]) <= precio;
+
+      const palabrasClave = nombre.split(" ").filter(p => p.trim() !== "");
+      const nombreIncluye = palabrasClave.every(palabra => juegos.includes(palabra));
+
+      const consolaIncluye = consola === "" || consolaTexto.includes(consola);
+
       return nombreIncluye && consolaIncluye && precioValido && tieneConsola && tienePrecio;
     });
 

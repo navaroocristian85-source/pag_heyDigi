@@ -6,6 +6,7 @@
   <title>Hey Digi - Juegos Digitales</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
 
@@ -13,30 +14,34 @@
   <header class="navbar-floating">
     <div class="navbar-content" id="barraFlotante">
 
-    <div class="superior-navbar">
-      <div class="logo">
-        <img src="logo_hey.png" alt="Hey Digi" />
-      </div>
+      <div class="superior-navbar">
+        <div class="logo">
+          <img src="logo_hey.png" alt="Hey Digi" />
+        </div>
 
-      <div class="search-wrapper">
-        <button class="search-icon" id="searchIcon" aria-label="Buscar">
-          <img src="magnifyingglass.svg" alt="Buscar" />
-        </button>
+        <div class="search-wrapper">
+          <button class="search-icon" id="searchIcon" aria-label="Buscar">
+            <img src="magnifyingglass.svg" alt="Buscar" />
+          </button>
+        </div>
       </div>
-    </div>
-
 
       <!-- Buscador desplegable dentro de la barra -->
       <div class="buscador-dropdown" id="buscadorDropdown">
-        <h2>Buscardor de juegos</h2>
+        <h2>Buscador de juegos</h2>
 
         <label for="filtroNombre">Buscar por nombre:</label>
-        <input type="text" id="filtroNombre" placeholder="Ej: Mario, Zelda" />
+        <input type="text" id="filtroNombre" placeholder="Ej: Mario Zelda" />
+        <p class="ayuda-busqueda">
+          Puedes escribir uno o más nombres separados por espacios. Ej: <strong>Mario Zelda</strong>
+        </p>
 
         <label for="filtroConsola">Consola:</label>
         <select id="filtroConsola">
           <option value="">Todas</option>
           <option>Nintendo Switch</option>
+          <option>Nintendo Switch 2</option>
+          <option>Ambas</option>
         </select>
 
         <label for="filtroPrecio">Precio máximo (CLP):</label>
@@ -50,11 +55,11 @@
     </div>
   </header>
 
-<section class="encabezado">
-  <h1>¡Hey Digi está encendido!</h1>
-  <p class="subtexto">Desbloquea horas de diversión con los mejores juegos digitales para Nintendo Switch™.</p>
-  <p class="linea-extra">✨ Actualizado a diario – Packs limitados ✨</p>
-</section>
+  <section class="encabezado">
+    <h1>¡Hey Digi está encendido!</h1>
+    <p class="subtexto">Desbloquea horas de diversión con los mejores juegos digitales para Nintendo Switch™.</p>
+    <p class="linea-extra">✨ Actualizado a diario – Packs limitados ✨</p>
+  </section>
 
   <main id="catalogo"></main>
 

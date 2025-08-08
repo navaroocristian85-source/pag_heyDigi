@@ -330,3 +330,10 @@ main {
     text-shadow: 0 0 10px var(--violeta), 0 0 20px var(--rosa);
   }
 }
+
+.ayuda-busqueda {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
