@@ -111,7 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const precioValido = isNaN(precio) || Number(pack["Precio CLP"]) <= precio;
 
       const palabrasClave = nombre.split(" ").filter(p => p.trim() !== "");
-      const nombreIncluye = palabrasClave.every(palabra => juegos.includes(palabra));
+      const nombreIncluye = palabrasClave.every(palabra =>
+      juegos.includes(palabra) || pack["Pack ID"]?.toString() === palabra
+    );
 
       const consolaIncluye = consola === "" || consolaTexto.includes(consola);
 
