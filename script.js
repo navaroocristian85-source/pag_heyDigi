@@ -47,7 +47,7 @@ function mostrarPacks(packs) {
 }
 
 Papa.parse(
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFDTOUDh0yCwUYO2LN4IzFbMFudjZG-CnogJDGQvhQfDpL3C1s6Y3iLJ78ra4S-iDZjPLPjP44mcB4/pub?gid=1135075618&single=true&output=csv",
+  "https://docs.google.com/spreadsheets/d/1hXZx9sG7s8eJCt8jcsowCjHs9AAZI--_4LflZo1tRE0/gviz/tq?tqx=out:csv&gid=1135075618",
   {
     download: true,
     header: true,
