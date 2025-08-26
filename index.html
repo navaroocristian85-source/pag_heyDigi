@@ -1,52 +1,93 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" dir="ltr">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- Viewport full + safe area (iOS/IG WebView) -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
+  <!-- Progressive web colors / status bar -->
+  <meta name="theme-color" content="#0a0013" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
   <title>Hey Digi - Juegos Digitales</title>
+
+  <!-- Performance: preconnect para fuentes (reduce FOIT/FOUT en Safari/IG) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS (usa solo una referencia; la con ?v=... para bustear caché) -->
+  <!-- CSS (una sola referencia, con cache-busting) -->
   <link rel="stylesheet" href="./style.css?v=2025-08-25-1">
 
   <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- Seguridad básica -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
+
+  <!-- Librería PapaParse (defer para no bloquear) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
+
+  <!-- Tu JS (con cache-busting opcional) -->
+  <script src="script.js?v=2025-08-25-1" defer></script>
+
+
 <body>
 
+  <!-- Mensaje si JS está deshabilitado -->
+  <noscript>
+    <div style="padding:12px;background:#2b0063;color:#fff;text-align:center;font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+      Necesitas activar JavaScript para ver el catálogo de Hey Digi.
+    </div>
+  </noscript>
+
   <!-- 🧩 Barra flotante con logo, lupa y buscador integrado -->
-  <header class="navbar-floating">
-    <div class="navbar-content" id="barraFlotante">
+  <header class="navbar-floating" role="banner">
+    <div class="navbar-content" id="barraFlotante" role="navigation" aria-label="Barra principal">
 
       <div class="superior-navbar">
         <div class="logo">
-          <img src="logo_hey.png" alt="Hey Digi" />
+          <img src="logo_hey.png" alt="Hey Digi" loading="lazy" decoding="async" />
         </div>
 
         <div class="search-wrapper">
-          <button class="search-icon" id="searchIcon" aria-label="Buscar">
-            <img src="magnifyingglass.svg" alt="Buscar" />
+          <!-- aria-controls enlaza con el panel; aria-expanded la actualiza tu JS -->
+          <button class="search-icon" id="searchIcon" aria-label="Abrir buscador" aria-controls="buscadorDropdown" aria-expanded="false">
+            <img src="magnifyingglass.svg" alt="Buscar" width="26" height="26" decoding="async" />
           </button>
         </div>
       </div>
 
       <!-- Buscador desplegable dentro de la barra -->
-      <div class="buscador-dropdown" id="buscadorDropdown">
+      <div class="buscador-dropdown" id="buscadorDropdown" role="search" aria-live="polite" aria-label="Buscador de juegos">
         <h2>Buscador de juegos</h2>
 
         <label for="filtroNombre">Buscar por nombre:</label>
-        <input type="text" id="filtroNombre" placeholder="Ej: Mario Zelda" />
+        <input
+          type="text"
+          id="filtroNombre"
+          placeholder="Ej: Mario Zelda"
+          inputmode="text"
+          autocomplete="off"
+          enterkeyhint="search"
+          spellcheck="false"
+        />
+
         <p class="ayuda-busqueda">
           Puedes escribir uno o más nombres separados por espacios. Ej: <strong>Mario Zelda</strong>
         </p>
 
         <label for="filtroConsola">Consola:</label>
-        <select id="filtroConsola">
+        <select id="filtroConsola" autocomplete="off">
           <option value="">Todas</option>
           <option>Nintendo Switch</option>
           <option>Nintendo Switch 2</option>
@@ -54,11 +95,20 @@
         </select>
 
         <label for="filtroPrecio">Precio máximo (CLP):</label>
-        <input type="number" id="filtroPrecio" placeholder="Ej: 25000" />
+        <input
+          type="number"
+          id="filtroPrecio"
+          placeholder="Ej: 25000"
+          inputmode="numeric"
+          min="0"
+          step="1"
+          enterkeyhint="done"
+        />
 
-        <div class="botones-busqueda">
-          <button class="btn-purple" id="aplicarFiltros">Aplicar</button>
-          <button class="btn-red" id="limpiarFiltros">Limpiar</button>
+        <div class="botones-busqueda" role="group" aria-label="Acciones de búsqueda">
+          <!-- type="button" evita submits implícitos en WebViews -->
+          <button class="btn-purple" id="aplicarFiltros" type="button">Aplicar</button>
+          <button class="btn-red" id="limpiarFiltros" type="button">Limpiar</button>
         </div>
       </div>
     </div>
@@ -69,14 +119,16 @@
     <p class="subtexto">Desbloquea horas de diversión con los mejores juegos digitales para Nintendo Switch™.</p>
     <p class="linea-extra">✨ Actualizado a diario – Packs limitados ✨</p>
   </section>
+  
+  <!-- Mensaje flotante (opcional: si lo dejas, el JS no crea otro) -->
+  <div id="mensajeFiltro" class="mensaje-filtro"></div>
 
-  <main id="catalogo"></main>
+  <!-- Catálogo (único) -->
+  <main id="catalogo" role="main"></main>
 
-  <!-- Librería PapaParse -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <!-- Script personalizado -->
-  <script src="script.js"></script>
-
-
+  <footer>
+    <p>© 2024 Hey Digi. Todos los derechos reservados.</p>
+    <p>Hecho con ❤️ por Tilin.</p>
+  </footer>
 </body>
 </html>

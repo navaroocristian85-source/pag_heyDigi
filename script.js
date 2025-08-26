@@ -12,13 +12,22 @@ const parseCLP = (v) => {
   return Number.isFinite(n) ? n : NaN;
 };
 
+// Simple escape para inyectar textos seguros en HTML
+const escapeHTML = (s) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 // Genera <li> a partir de "Juegos Incluidos" soportando saltos de línea o comas
 const juegosAHTML = (texto) => {
   const html = String(texto ?? "")
     .split(/\r?\n|,/)      // soporta \n, \r\n y también comas
     .map(j => j.trim())
     .filter(Boolean)       // elimina vacíos
-    .map(j => `<li>${j}</li>`)
+    .map(j => `<li>${escapeHTML(j)}</li>`)
     .join("");
   return html || "<li><em>Sin juegos listados</em></li>";
 };
@@ -29,14 +38,37 @@ const consolasAHTML = (texto) => {
     .split(",")
     .map(c => c.trim())
     .filter(Boolean)
-    .map(c => `<span class="badge-console">${c}</span>`)
+    .map(c => `<span class="badge-console">${escapeHTML(c)}</span>`)
     .join(" ");
   return html || '<span class="badge-console">No especificada</span>';
 };
 
+/* --------- Layout: calcula padding según altura real de la barra --------- */
+// Declaración hoisted para que nunca falte aunque se llame antes
+function actualizarPaddingPorBarra() {
+  // Usa rAF para aplicar después del reflow/animaciones
+  requestAnimationFrame(() => {
+    const barra = document.querySelector('.navbar-content');
+    const main  = document.querySelector('main');
+    if (!barra || !main) return;
+    main.style.paddingTop = `${barra.offsetHeight}px`;
+  });
+}
+
+// Debounce genérico (para resize)
+const debounce = (fn, delay = 120) => {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(null, args), delay);
+  };
+};
+
 /* --------- Render principal --------- */
 function mostrarPacks(packs) {
+  if (!catalogo) return;
   catalogo.innerHTML = "";
+
   packs.forEach(pack => {
     const precioNum = parseCLP(pack["Precio CLP"]);
     const tienePrecio = Number.isFinite(precioNum);
@@ -51,7 +83,7 @@ function mostrarPacks(packs) {
     const packData = encodeURIComponent(JSON.stringify(pack));
 
     div.innerHTML = `
-      <h2>Pack N°${pack["Pack ID"]}</h2>
+      <h2>Pack N°${escapeHTML(pack["Pack ID"])}</h2>
       <p><strong>Juegos incluidos:</strong></p>
       <ul>${juegosHTML}</ul>
 
@@ -84,18 +116,30 @@ Papa.parse(
   {
     download: true,
     header: true,
+    skipEmptyLines: true,
     complete: function (results) {
-      datosOriginales = results.data;
-      mostrarPacks(datosOriginales);
-      cargarOpcionesConsola();
+      try {
+        // Filtra filas totalmente vacías que a veces cuela Google Sheets
+        datosOriginales = (results.data || []).filter(row =>
+          Object.values(row).some(v => String(v ?? "").trim() !== "")
+        );
+        mostrarPacks(datosOriginales);
+        cargarOpcionesConsola();
+      } catch (e) {
+        console.error("Error procesando datos:", e);
+      }
+    },
+    error: function (err) {
+      console.error("Error al cargar CSV:", err);
     }
   }
 );
 
 function cargarOpcionesConsola() {
   const selectConsola = document.getElementById("filtroConsola");
-  const consolasUnicas = new Set();
+  if (!selectConsola) return;
 
+  const consolasUnicas = new Set();
   datosOriginales.forEach(pack => {
     const consola = pack["Consola"] || "";
     consola.split(",").forEach(c => {
@@ -132,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
       barra.classList.remove("expandido");
       actualizarPaddingPorBarra();
     }
-  });
+  }, { passive: true });
 
   // Filtros
   aplicarBtn?.addEventListener("click", () => {
@@ -161,12 +205,24 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarPacks(filtrados);
     barra.classList.remove("expandido");
     actualizarPaddingPorBarra();
+
+    // --- Mensaje de resultado (grande y legible) ---
+    const n = filtrados.length;
+    if (n > 0) {
+      showToast(n, 'ok');
+    } else {
+      showToast(0, 'error');
+    }
   });
 
   limpiarBtn?.addEventListener("click", () => {
-    document.getElementById("filtroNombre").value = "";
-    document.getElementById("filtroConsola").value = "";
-    document.getElementById("filtroPrecio").value = "";
+    const inputNombre  = document.getElementById("filtroNombre");
+    const selectConsola = document.getElementById("filtroConsola");
+    const inputPrecio  = document.getElementById("filtroPrecio");
+    if (inputNombre)  inputNombre.value = "";
+    if (selectConsola) selectConsola.value = "";
+    if (inputPrecio)  inputPrecio.value = "";
+
     mostrarPacks(datosOriginales);
     actualizarPaddingPorBarra();
   });
@@ -177,9 +233,9 @@ document.addEventListener("DOMContentLoaded", () => {
     obs.observe(barra, { attributes: true, attributeFilter: ["class"] });
   }
 
-  // Ajusta al cargar y al redimensionar
+  // Ajusta al cargar y al redimensionar (debounced)
   window.addEventListener("load", actualizarPaddingPorBarra);
-  window.addEventListener("resize", actualizarPaddingPorBarra);
+  window.addEventListener("resize", debounce(actualizarPaddingPorBarra, 120), { passive: true });
 });
 
 /* --------- Delegación: botón WhatsApp --------- */
@@ -199,11 +255,43 @@ document.addEventListener("click", function (e) {
   window.open(link, "_blank");
 });
 
-/* --------- Layout: calcula padding según altura real de la barra --------- */
-// El safe-area (notch) lo maneja CSS con env(safe-area-inset-top).
-function actualizarPaddingPorBarra() {
-  const barra = document.querySelector('.navbar-content');
-  const main  = document.querySelector('main');
-  if (!barra || !main) return;
-  main.style.paddingTop = `${barra.offsetHeight}px`;
+// === Accesibilidad buscador (mantiene aria-expanded actualizado) ===
+(function () {
+  const btn = document.getElementById('searchIcon');
+  const barra = document.getElementById('barraFlotante');
+  if (!btn || !barra) return;
+
+  const updateAria = () => {
+    const expanded = barra.classList.contains('expandido');
+    btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  };
+
+  const obs = new MutationObserver(updateAria);
+  obs.observe(barra, { attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('click', updateAria, true);
+  window.addEventListener('load', updateAria);
+})();
+
+function showToast(n, type = 'ok') {
+  let toast = document.getElementById('mensajeFiltro');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'mensajeFiltro';
+    toast.className = 'mensaje-filtro';
+    document.body.appendChild(toast);
+  }
+
+  const isError = type === 'error';
+  toast.classList.toggle('error', isError);
+
+  if (isError) {
+    toast.innerHTML = `<span class="body">No se encontraron<br>coincidencias</span>`;
+  } else {
+    toast.innerHTML = `<span class="body">Se encontraron<br>${n} coincidencias</span>`;
+  }
+
+  requestAnimationFrame(() => toast.classList.add('visible'));
+
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('visible'), 3000);
 }
