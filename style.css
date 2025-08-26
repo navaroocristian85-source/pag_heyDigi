@@ -1,4 +1,8 @@
+/* ===========================
+   HEY DIGI — STYLE CLEAN
+   =========================== */
 
+/* ---------- Variables ---------- */
 :root {
   --fondo-oscuro: #1c003b;
   --fondo-morado: linear-gradient(180deg, #2b0063, #11001d);
@@ -8,6 +12,19 @@
   --rojo: #ff4b5c;
   --amarillo: #ffe600;
   --verde-wsp: #25D366;
+
+  /* altura aprox. de la barra cerrada; ajústala si cambias la navbar */
+  --navbar-altura: 96px;
+}
+
+/* ---------- Base / Reset útil ---------- */
+html, body {
+  background: #0a0013;                /* base estable para WebView */
+  color: var(--texto-blanco);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -16,12 +33,17 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100% 200vh;
-  color: var(--texto-blanco);
-  margin: 0;
-  padding: 0;
 }
 
-/* === NAVBAR === */
+/* mejor render en pantallas retina */
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+/* Reduce animaciones si el usuario lo pide */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Navbar flotante ---------- */
 .navbar-floating {
   width: 100%;
   display: flex;
@@ -47,7 +69,9 @@ body {
   transition: max-height 0.4s ease, padding 0.4s ease;
   flex-direction: row;
   max-height: 80px;
-  position: relative;
+  position: sticky;
+  top: max(0px, env(safe-area-inset-top));
+  z-index: 1000;
 }
 
 .navbar-content.expandido {
@@ -65,275 +89,280 @@ body {
   align-items: center;
 }
 
-.logo img {
-  height: 58px;
-  object-fit: contain;
-}
+.logo img { height: 58px; object-fit: contain; }
 
-/* === LUPA === */
-.search-wrapper {
-  display: flex;
-  justify-content: flex-end;
-}
+/* ---------- Lupa ---------- */
+.search-wrapper { display: flex; justify-content: flex-end; }
+.search-icon { background: none; border: none; cursor: pointer; }
+.search-icon img { width: 26px; height: 26px; transition: transform .2s ease; }
+.search-icon:hover img { transform: scale(1.1); }
 
-.search-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.search-icon img {
-  width: 26px;
-  height: 26px;
-  transition: transform 0.2s ease;
-}
-
-.search-icon:hover img {
-  transform: scale(1.1);
-}
-
-/* === BUSCADOR DROPDOWN === */
+/* ---------- Buscador (dropdown) ---------- */
 .buscador-dropdown {
   display: none;
   flex-direction: column;
   width: 100%;
   padding: 24px 0 0;
   gap: 12px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn .3s ease;
 }
+.navbar-content.expandido .buscador-dropdown { display: flex; }
 
-.navbar-content.expandido .buscador-dropdown {
-  display: flex;
-}
-
+/* Título arcade, limpio */
 .buscador-dropdown h2 {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 12px;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(18px, 4.2vw, 22px);
+  color: #111;
+  text-shadow: none;
+  margin: 4px 0 14px;
 }
 
-.buscador-dropdown input::placeholder,
-.buscador-dropdown select::placeholder {
-  color: #999;
-  font-style: italic;
+/* Panel readable con Inter */
+.buscador-dropdown,
+.buscador-dropdown label,
+.buscador-dropdown .ayuda-busqueda,
+.buscador-dropdown input,
+.buscador-dropdown select,
+.botones-busqueda .btn-purple,
+.botones-busqueda .btn-red {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
 .buscador-dropdown label {
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .2px;
   color: #222;
-  text-shadow: 1px 1px 0 #fff;
+  text-shadow: none;
+  margin-bottom: 6px;
+  display: inline-block;
 }
 
-/* === BOTONES DE BUSQUEDA === */
+.buscador-dropdown input,
+.buscador-dropdown select {
+  background: rgba(255,255,255,0.96);
+  color: #111;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.2;
+  box-shadow: 0 1px 0 rgba(0,0,0,.03) inset;
+}
+.buscador-dropdown input::placeholder { color: #9aa0a6; opacity: 1; }
+
+.ayuda-busqueda {
+  font-size: 13px;
+  color: #444;
+  margin: 8px 0 16px;
+}
+
+.navbar-content.expandido .buscador-dropdown { gap: 14px; }
+
+/* Botones aplicar/limpiar visibles y cómodos */
 .botones-busqueda {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
+  margin-top: 16px;
+  width: 100%;
 }
-
-.btn-purple,
-.btn-red {
-  padding: 10px 16px;
-  font-size: 10px;
-  font-weight: bold;
-  font-family: 'Press Start 2P';
+.botones-busqueda .btn-purple,
+.botones-busqueda .btn-red {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  letter-spacing: .2px;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  color: white;
+  transition: background .2s ease, transform .15s ease;
+  color: #fff;
+}
+.botones-busqueda .btn-purple {
+  background: linear-gradient(135deg, var(--violeta), var(--rosa));
+  box-shadow: 0 2px 6px rgba(142,45,226,0.4);
+}
+.botones-busqueda .btn-purple:hover { background: linear-gradient(135deg, #a04ff0, #e248ff); transform: translateY(-2px); }
+.botones-busqueda .btn-red    { background: var(--rojo); box-shadow: 0 2px 6px rgba(255,75,92,0.4); }
+.botones-busqueda .btn-red:hover { background: #ff616f; transform: translateY(-2px); }
+
+@media (max-width: 360px) {
+  .buscador-dropdown h2 { font-size: 18px; }
+  .buscador-dropdown input, .buscador-dropdown select { font-size: 14px; padding: 11px 12px; }
 }
 
-.btn-purple {
-  background: var(--violeta);
-}
-
-.btn-red {
-  background: var(--rojo);
-}
-
-/* === ENCABEZADO / BIENVENIDA === */
+/* ---------- Encabezado ---------- */
 .encabezado {
   text-align: center;
   padding: 32px 16px 0;
+  margin-top: 12px;
 }
-
 .encabezado h1 {
   font-size: 20px;
   color: var(--amarillo);
   text-shadow: 0 0 8px var(--amarillo);
   margin-bottom: 12px;
 }
-
-.subtexto,
-.linea-extra {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--texto-blanco);
-  max-width: 900px;
-  margin: 0 auto;
+.subtexto, .linea-extra {
+  font-size: 13px; line-height: 1.6; color: var(--texto-blanco);
+  max-width: 900px; margin: 0 auto;
 }
-
-.linea-extra {
-  margin-top: 8px;
-  color: var(--rosa);
-  font-weight: bold;
-  text-shadow: 0 0 5px var(--violeta);
-}
-
+.linea-extra { margin-top: 8px; color: var(--rosa); font-weight: bold; text-shadow: 0 0 5px var(--violeta); }
 .bienvenida-glow {
-  font-size: 24px;
-  color: var(--amarillo);
-  text-align: center;
-  margin-bottom: 12px;
-  text-shadow: 0 0 5px var(--violeta), 0 0 10px var(--rosa);
-  animation: glowPulse 2.5s infinite ease-in-out;
+  font-size: 24px; color: var(--amarillo); text-align: center; margin-bottom: 12px;
+  text-shadow: 0 0 5px var(--violeta), 0 0 10px var(--rosa); animation: glowPulse 2.5s infinite ease-in-out;
 }
 
-/* === PACKS === */
+/* ---------- Layout catálogo ---------- */
+/* padding-top incluye navbar + safe-area; laterales/bottom fijos */
 main {
-  padding: 32px 24px;
+  padding: calc(var(--navbar-altura) + max(0px, env(safe-area-inset-top))) 24px 32px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
 }
 
+/* ---------- Card Pack ---------- */
 .pack {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0,0,0,0.45);
   border: 2px solid var(--violeta);
   border-radius: 16px;
   padding: 16px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #fff;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
-
-.pack:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 20px var(--rosa), 0 0 40px var(--violeta);
-}
+.pack:hover { transform: translateY(-6px); box-shadow: 0 0 20px var(--rosa), 0 0 40px var(--violeta); }
 
 .pack h2 {
   font-size: 14px;
   color: var(--amarillo);
   margin-bottom: 8px;
-  text-shadow: 1px 1px 1px black;
+  text-shadow: 1px 1px 1px #000;
 }
 
+.pack p, .pack ul, .pack li, .pack .descripcion { color: #fff; }
+
+/* Listas de juegos — legibles en móvil */
 .pack ul {
-  padding-left: 16px;
-  list-style-position: outside;
+  list-style: disc inside;
+  margin-top: 8px;
+  margin-bottom: 26px;     /* más respiro antes de compatibilidad */
+  padding-left: 0;
 }
-
 .pack ul li {
-  overflow-wrap: break-word;
+  font-family: 'VT323', monospace;
+  font-size: clamp(19px, 2.7vw, 22px);
+  line-height: 1.55;
+  letter-spacing: .25px;
+  word-break: break-word;
 }
 
-.compatibilidad h4,
-.seccion-precio h4 {
-  font-size: 12px;
-  margin: 12px 0 4px;
+/* Compatibilidad bien separada */
+.compatibilidad { font-family: 'VT323', monospace; margin-top: 14px; }
+.compatibilidad h4 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px; margin: 0 0 12px 0;
 }
-
 .badge-console {
-  background: #000;
+  background: #0b0016;
   border: 1px solid var(--violeta);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 10px;
-  color: var(--texto-blanco);
+  color: #fff;
   display: inline-block;
-  margin-right: 6px;
+  padding: 7px 12px;
+  font-size: 12px;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 8px;
 }
 
+/* Precio + botón */
 .seccion-precio-boton {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 16px;
-  gap: 8px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  margin-top: 16px; gap: 8px;
+}
+.info-precio { display: flex; flex-direction: column; }
+.info-precio h4 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px; margin: 12px 0 4px;
 }
 
-.info-precio {
-  display: flex;
-  flex-direction: column;
-}
-
+/* Precio más balanceado */
 .seccion-precio-boton .precio {
-  font-size: 20px;
+  font-size: 22px;             /* antes 26px → más equilibrado */
   font-weight: bold;
   color: var(--amarillo);
-  line-height: 1.4;
-  margin: 0;
+  line-height: 1.5;
+  margin: 4px 0 0;
+  text-shadow: 0 0 4px rgba(255, 230, 0, 0.5);
+  letter-spacing: 0.3px;
+}
+
+/* En pantallas grandes, un poquito más grande */
+@media (min-width: 768px) {
+  .seccion-precio-boton .precio {
+    font-size: 24px;
+    line-height: 1.6;
+  }
 }
 
 .btn-wsp {
   background: var(--verde-wsp);
-  color: white;
+  color: #fff;
   font-weight: bold;
   font-size: 10px;
   font-family: 'Press Start 2P';
   border-radius: 8px;
   padding: 8px 14px 8px 10px;
   border: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   text-decoration: none;
-  box-shadow: 0 0 10px var(--verde-wsp);
-  transition: transform 0.2s ease;
-  width: 100%;
-  max-width: 100%;
-  justify-content: center;
-  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(37,211,102,0.6);
+  transition: transform .2s ease, box-shadow .2s ease;
+  width: 100%; max-width: 100%; justify-content: center; box-sizing: border-box;
 }
+.btn-wsp:hover { transform: scale(1.05); box-shadow: 0 0 14px rgba(37,211,102,0.8); }
+.wsp-icon { width: 18px; height: 18px; }
 
-.btn-wsp:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 14px #1dd05d;
+/* ---------- Responsive ---------- */
+@media (min-width: 768px) {
+  .seccion-precio-boton .precio { font-size: 28px; line-height: 1.7; }
+  .pack ul li { font-size: 22px; line-height: 1.6; }
+  .compatibilidad .badge-console { font-size: 12.5px; padding: 8px 12px; }
 }
-
-.wsp-icon {
-  width: 18px;
-  height: 18px;
-}
-
-
 @media (max-width: 480px) {
-  .seccion-precio-boton {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .btn-wsp {
-    width: 100%;
-    justify-content: center;
-  }
+  .seccion-precio-boton { flex-direction: column; align-items: flex-start; }
+  .btn-wsp { width: 100%; justify-content: center; }
 }
 
-/* === ANIMACIONES === */
+/* ---------- Animaciones ---------- */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes glowPulse {
-  0%, 100% {
-    text-shadow: 0 0 5px var(--violeta), 0 0 10px var(--rosa);
-  }
-  50% {
-    text-shadow: 0 0 10px var(--violeta), 0 0 20px var(--rosa);
-  }
+  0%,100% { text-shadow: 0 0 5px var(--violeta), 0 0 10px var(--rosa); }
+  50%     { text-shadow: 0 0 10px var(--violeta), 0 0 20px var(--rosa); }
 }
 
-.ayuda-busqueda {
-  font-size: 0.85rem;
-  color: #555;
-  margin-top: 4px;
-  margin-bottom: 16px;
+/* La barra expandida no debe recortar el contenido */
+.navbar-content.expandido {
+  max-height: none;     /* antes 480px */
+  overflow: visible;    /* antes hereda hidden */
+  padding-bottom: 16px; /* un poco de aire al final */
 }
+
+/* El panel del buscador con padding inferior para que quepan los botones */
+.buscador-dropdown {
+  padding-bottom: 16px;
+}
+
+/* Si quieres altura máxima con scroll interno (opcional, si prefieres limitar) */
+/*
+.navbar-content.expandido {
+  max-height: min(80vh, 900px);
+  overflow: auto;
+}
+*/
