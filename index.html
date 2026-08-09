@@ -2,133 +2,331 @@
 <html lang="es" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- Viewport full + safe area (iOS/IG WebView) -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-  <!-- Progressive web colors / status bar -->
-  <meta name="theme-color" content="#0a0013" />
+  <meta name="theme-color" content="#0f1018" />
+  <meta name="description" content="HeyDigi: juegos digitales, packs y soporte para Nintendo Switch.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
+  <title>HeyDigi - Juegos digitales</title>
 
-  <title>Hey Digi - Juegos Digitales</title>
-
-  <!-- Performance: preconnect para fuentes (reduce FOIT/FOUT en Safari/IG) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS (una sola referencia, con cache-busting) -->
-  <link rel="stylesheet" href="./style.css?v=2025-08-25-1">
-
-  <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-
-  <!-- Seguridad básica -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=2026-08-09-03">
+  <link rel="icon" href="logo_hey.png" type="image/png" />
+  <script src="script.js?v=2026-08-09-03" defer></script>
 </head>
+<body data-page="inicio">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <!-- Librería PapaParse (defer para no bloquear) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
+  <main id="contenido" class="app-shell">
+    <section class="app-view home-store active" data-view="inicio">
+      <section class="home-summary-card" aria-label="Resumen del catálogo">
+        <span class="home-summary-logo"><img src="logo_hey.png" alt="HeyDigi" decoding="async"></span>
+        <div>
+          <h1>Bienvenidos a HeyDigi</h1>
+          <p class="home-welcome">Bienvenidos a la mejor tienda de videojuegos de Chile, Argentina y del mundo. Vendemos juegos unitarios, packs y suscripciones.</p>
+          <div class="home-payments" aria-label="Medios de pago">
+            <div>
+              <strong>Pagos en Chile</strong>
+              <span>Transferencia, depósito y Mercado Pago con crédito.</span>
+            </div>
+            <div>
+              <strong>Argentina y extranjero</strong>
+              <span class="payment-methods">Prex <b>•</b> Astropay <b>•</b> Global 66 <b>•</b> Binance</span>
+            </div>
+          </div>
+          <div class="summary-counts">
+            <span><small>Packs de juegos</small><strong id="cantidadPacks">--</strong></span>
+            <span><small>Juegos unitarios</small><strong id="cantidadUnitarios">--</strong></span>
+          </div>
+        </div>
+      </section>
 
-  <!-- Tu JS (con cache-busting opcional) -->
-  <script src="script.js?v=2025-08-25-1" defer></script>
+      <section class="help-banner">
+        <div>
+          <strong>¿Necesitas ayuda?</strong>
+          <span>Como comprar, instalar y recibir soporte directo.</span>
+        </div>
+        <a href="#contacto" data-scroll-to="contacto">Ir a contacto</a>
+      </section>
 
-
-<body>
-
-  <!-- Mensaje si JS está deshabilitado -->
-  <noscript>
-    <div style="padding:12px;background:#2b0063;color:#fff;text-align:center;font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
-      Necesitas activar JavaScript para ver el catálogo de Hey Digi.
-    </div>
-  </noscript>
-
-  <!-- 🧩 Barra flotante con logo, lupa y buscador integrado -->
-  <header class="navbar-floating" role="banner">
-    <div class="navbar-content" id="barraFlotante" role="navigation" aria-label="Barra principal">
-
-      <div class="superior-navbar">
-        <div class="logo">
-          <img src="logo_hey.png" alt="Hey Digi" loading="lazy" decoding="async" />
+      <section class="home-section">
+        <div class="section-heading">
+          <h2>Juegos unitarios</h2>
+          <a href="#unitarios" data-view-link="unitarios">Ver todas</a>
         </div>
 
-        <div class="search-wrapper">
-          <!-- aria-controls enlaza con el panel; aria-expanded la actualiza tu JS -->
-          <button class="search-icon" id="searchIcon" aria-label="Abrir buscador" aria-controls="buscadorDropdown" aria-expanded="false">
-            <img src="magnifyingglass.svg" alt="Buscar" width="26" height="26" decoding="async" />
+        <div class="offer-row" id="ofertasInicio" aria-label="Juegos unitarios recientes">
+          <article class="game-tile game-tile-loading"><span>Cargando juegos...</span></article>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <div class="section-heading">
+          <h2>Packs de juegos</h2>
+          <a href="#packs" data-view-link="packs">Ver todos</a>
+        </div>
+
+        <div class="pack-carousel" aria-label="Packs destacados">
+          <a class="pack-preview" href="#packs" data-view-link="packs">
+            <span>11 juegos</span>
+            <h3>Pack 26</h3>
+            <ul>
+              <li>Hogwarts Legacy</li>
+              <li>Mario Kart 8 Deluxe</li>
+              <li>Super Smash Bros. Ultimate</li>
+            </ul>
+            <small>+8 juegos mas</small>
+            <strong>$33.990 <span class="clp-flag">CLP</span></strong>
+          </a>
+          <a class="pack-preview" href="#packs" data-view-link="packs">
+            <span>11 juegos</span>
+            <h3>Pack 25</h3>
+            <ul>
+              <li>Super Mario Maker 2</li>
+              <li>Mario Party Superstars</li>
+              <li>New Super Mario Bros. U Deluxe</li>
+            </ul>
+            <small>+8 juegos mas</small>
+            <strong>$28.990 <span class="clp-flag">CLP</span></strong>
+          </a>
+          <a class="pack-preview" href="#packs" data-view-link="packs">
+            <span>10 juegos</span>
+            <h3>Pack 24</h3>
+            <ul>
+              <li>Mario & Sonic Olympic Games</li>
+              <li>LEGO DC Super-Villains</li>
+              <li>Animal Crossing New Horizons</li>
+            </ul>
+            <small>+7 juegos mas</small>
+            <strong>$21.990 <span class="clp-flag">CLP</span></strong>
+          </a>
+          <a class="pack-preview featured" href="#packs" data-view-link="packs">
+            <span>Ver todos</span>
+            <h3>Catalogo completo</h3>
+            <ul>
+              <li>Filtra por nombre</li>
+              <li>Revisa compatibilidad</li>
+              <li>Compra por WhatsApp</li>
+            </ul>
+            <small>Packs actualizados</small>
+            <strong>Abrir packs</strong>
+          </a>
+        </div>
+      </section>
+
+      <section class="online-section" aria-labelledby="onlineTitle">
+        <div class="section-heading online-heading">
+          <h2 id="onlineTitle">Nintendo Switch Online</h2>
+          <p class="online-instruction">Elige tu plan y duración</p>
+        </div>
+
+        <section class="online-card">
+          <div class="online-card-top">
+            <span class="online-tag" id="onlineTipo"><span class="online-tag-text">Solo online</span></span>
+            <p class="online-price" id="onlinePrecio">$5.000 <span>CLP</span></p>
+          </div>
+
+          <div class="online-plan-visual" id="onlineVisualContainer">
+            <img id="onlineVisual" src="assets/nintendo-switch-online.avif" alt="Nintendo Switch Online" decoding="async">
+          </div>
+
+          <div class="online-modes" role="tablist" aria-label="Tipo de suscripción">
+            <button class="online-mode active" type="button" data-online-plan="online" role="tab" aria-selected="true">Solo online</button>
+            <button class="online-mode" type="button" data-online-plan="expansion" role="tab" aria-selected="false">Online + expansión</button>
+          </div>
+
+          <div class="online-durations" aria-label="Duración de suscripción">
+            <button class="online-duration active" type="button" data-online-duration="3">3 meses</button>
+            <button class="online-duration" type="button" data-online-duration="6">6 meses</button>
+            <button class="online-duration" type="button" data-online-duration="12">12 meses</button>
+          </div>
+
+          <a class="online-buy" id="comprarOnline" href="https://wa.me/56941347576" target="_blank" rel="noopener">Comprar ahora</a>
+        </section>
+      </section>
+
+      <a class="instagram-banner" href="https://www.instagram.com/heydigi.of?igsh=MWxtdDUzdTA3Y2J6Zg==" target="_blank" rel="noopener" aria-label="Seguir a HeyDigi en Instagram">
+        <span class="instagram-banner-icon"><img src="assets/icons/instagram.svg" alt=""></span>
+        <span class="instagram-banner-copy">
+          <strong>Síguenos en Instagram</strong>
+          <small>Novedades, juegos y packs disponibles.</small>
+        </span>
+        <span class="instagram-handle">@heydigi.of</span>
+      </a>
+
+      <section class="home-trust" aria-label="Experiencia de HeyDigi">
+        <div>
+          <strong>+5.800</strong>
+          <span>Ventas realizadas</span>
+        </div>
+        <div>
+          <strong>6 años</strong>
+          <span>De experiencia</span>
+        </div>
+      </section>
+
+      <section class="faq-card" aria-labelledby="faqTitle">
+        <div>
+          <h2 id="faqTitle">Preguntas frecuentes</h2>
+          <p>Lo importante antes de comprar.</p>
+        </div>
+        <div class="faq-list" id="listaPreguntas" aria-live="polite">
+          <p class="faq-loading">Cargando preguntas frecuentes...</p>
+        </div>
+      </section>
+
+      <section class="contact-card" id="contacto">
+        <div>
+          <h2>Contacto directo</h2>
+          <p>Confirma disponibilidad o escríbenos directamente.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="contact-action contact-whatsapp" href="https://wa.me/56941347576" target="_blank" rel="noopener"><img src="assets/icons/whatsapp.svg" alt="">WhatsApp</a>
+          <a class="contact-action contact-instagram" href="https://www.instagram.com/heydigi.of?igsh=MWxtdDUzdTA3Y2J6Zg==" target="_blank" rel="noopener"><img src="assets/icons/instagram.svg" alt="">Instagram</a>
+        </div>
+      </section>
+
+      <section class="terms-section">
+        <button class="terms-trigger" id="abrirTerminos" type="button" aria-expanded="false" aria-controls="modalTerminos">
+          <img src="assets/icons/shield-check.svg" alt="">
+          <span>Términos y condiciones</span>
+          <b aria-hidden="true">›</b>
+        </button>
+      </section>
+    </section>
+
+    <section class="app-view" data-view="catalogo">
+      <section class="catalog-hero">
+        <div>
+          <p class="section-note" id="catalogNote">Pack de juegos</p>
+          <h1 id="catalogTitle" hidden>Packs disponibles</h1>
+          <p id="catalogCopy">Busca por juego, consola o precio maximo. Cada pack abre WhatsApp con el detalle listo para comprar.</p>
+        </div>
+        <button class="catalog-help" id="abrirAyudaCatalogo" type="button" aria-expanded="false" aria-controls="ayudaCatalogo" title="Información del catálogo">?</button>
+        <aside class="catalog-help-popover" id="ayudaCatalogo" hidden>
+          <h2 id="ayudaCatalogoTitulo">Información</h2>
+          <p id="ayudaCatalogoTexto"></p>
+        </aside>
+      </section>
+
+      <section class="filter-shell" aria-label="Buscar y filtrar catalogo">
+        <div class="search-row">
+          <label class="sr-only" for="filtroNombre">Buscar juegos</label>
+          <img class="search-input-icon" src="assets/icons/search.svg" alt="">
+          <input type="search" id="filtroNombre" placeholder="Buscar juego..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="filter-row">
+          <button class="filter-toggle" id="toggleFiltros" type="button" aria-expanded="false" aria-controls="panelFiltros">
+            <img src="assets/icons/list-filter.svg" alt="">
+            <span>Filtros</span>
           </button>
         </div>
-      </div>
 
-      <!-- Buscador desplegable dentro de la barra -->
-      <div class="buscador-dropdown" id="buscadorDropdown" role="search" aria-live="polite" aria-label="Buscador de juegos">
-        <h2>Buscador de juegos</h2>
-
-        <label for="filtroNombre">Buscar por nombre:</label>
-        <input
-          type="text"
-          id="filtroNombre"
-          placeholder="Ej: Mario Zelda"
-          inputmode="text"
-          autocomplete="off"
-          enterkeyhint="search"
-          spellcheck="false"
-        />
-
-        <p class="ayuda-busqueda">
-          Puedes escribir uno o más nombres separados por espacios. Ej: <strong>Mario Zelda</strong>
-        </p>
-
-        <label for="filtroConsola">Consola:</label>
-        <select id="filtroConsola" autocomplete="off">
-          <option value="">Todas</option>
-          <option>Nintendo Switch</option>
-          <option>Nintendo Switch 2</option>
-          <option>Ambas</option>
-        </select>
-
-        <label for="filtroPrecio">Precio máximo (CLP):</label>
-        <input
-          type="number"
-          id="filtroPrecio"
-          placeholder="Ej: 25000"
-          inputmode="numeric"
-          min="0"
-          step="1"
-          enterkeyhint="done"
-        />
-
-        <div class="botones-busqueda" role="group" aria-label="Acciones de búsqueda">
-          <!-- type="button" evita submits implícitos en WebViews -->
-          <button class="btn-purple" id="aplicarFiltros" type="button">Aplicar</button>
-          <button class="btn-red" id="limpiarFiltros" type="button">Limpiar</button>
+        <div class="active-filters-row" id="filaFiltrosActivos" hidden>
+          <div class="active-filters" id="filtrosActivos" aria-live="polite"></div>
+          <button class="filter-quick-clear" id="limpiarFiltrosRapido" type="button" aria-label="Eliminar filtros activos">×</button>
         </div>
-      </div>
+
+        <div class="filter-panel" id="panelFiltros" hidden>
+          <div class="filter-modal-header">
+            <div class="filter-modal-heading">
+              <span class="filter-modal-icon"><img src="assets/icons/list-filter.svg" alt=""></span>
+              <h2>Filtros</h2>
+            </div>
+            <button class="modal-close" id="cerrarFiltros" type="button" aria-label="Cerrar filtros">×</button>
+          </div>
+
+          <div class="price-range">
+            <label for="filtroPrecioMinimo">Precio mínimo CLP</label>
+            <div class="price-input">
+              <span aria-hidden="true">$</span>
+              <input type="text" id="filtroPrecioMinimo" placeholder="Sin mínimo" inputmode="numeric" autocomplete="off">
+            </div>
+
+            <label for="filtroPrecioMaximo">Precio máximo CLP</label>
+            <div class="price-input">
+              <span aria-hidden="true">$</span>
+              <input type="text" id="filtroPrecioMaximo" placeholder="Sin máximo" inputmode="numeric" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="filter-console" id="grupoFiltroConsola" hidden>
+            <span class="filter-console-label">Compatibilidad</span>
+            <div class="console-segmented" role="group" aria-label="Compatibilidad del pack">
+              <button class="console-option active" type="button" data-console-filter="Ambas" aria-pressed="true">Ambas</button>
+              <button class="console-option" type="button" data-console-filter="Nintendo Switch 2" aria-pressed="false">Switch 2</button>
+            </div>
+            <select id="filtroConsola" class="sr-only" autocomplete="off" tabindex="-1" aria-hidden="true">
+              <option value="Ambas" selected>Ambas</option>
+              <option value="Nintendo Switch 2">Nintendo Switch 2</option>
+            </select>
+          </div>
+
+        </div>
+      </section>
+
+      <div id="mensajeFiltro" class="mensaje-filtro"></div>
+      <section id="catalogo" class="catalog-grid" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <div class="search-backdrop" id="filtrosBackdrop" hidden></div>
+  <div class="terms-backdrop" id="fondoTerminos" hidden></div>
+  <section class="terms-modal" id="modalTerminos" role="dialog" aria-modal="true" aria-labelledby="modalTerminosTitulo" hidden>
+    <header>
+      <div><img src="assets/icons/shield-check.svg" alt=""><h2 id="modalTerminosTitulo">Términos y condiciones</h2></div>
+      <button id="cerrarTerminos" type="button" aria-label="Cerrar términos">×</button>
+    </header>
+    <div class="terms-modal-body">
+      <section>
+        <h3>1. Entrega y descargas</h3>
+        <p>La entrega estimada es de <strong>10 a 60 minutos</strong>, según distribuidor.</p>
+        <p><strong>Descarga inmediata:</strong> debes iniciar las descargas apenas recibas los datos. Si compras varios juegos, aplica la misma regla.</p>
+        <blockquote>Recuerda contar con tiempo para la instalación. Si no estás seguro, es mejor esperar. Evitemos errores por apuro.</blockquote>
+        <p>Si la entrega supera las 3 horas, te consultaremos si deseas continuar. Si eliges no seguir, puedes solicitar la devolución del dinero.</p>
+      </section>
+      <section>
+        <h3>2. Cuentas y juegos</h3>
+        <p>Cuentas tipo <strong>principal:</strong> juegas con tu usuario personal.</p>
+        <p><strong>Prohibido:</strong> no juegues con la cuenta entregada ni modifiques su información. Es solo para descargar y debe mantenerse en la consola sin tocarla.</p>
+        <p>Cambiar datos, borrar la cuenta, usar el usuario entregado, formatear la consola o archivar juegos anula la garantía de inmediato.</p>
+      </section>
+      <section class="terms-risk">
+        <h3>3. Riesgo de restricciones online</h3>
+        <p>Existe una posibilidad de restricciones online. En más de 5.800 ventas, los casos reportados han sido cercanos al 1% en Switch 1 y Switch 2.</p>
+        <p>Si ocurre un baneo, HeyDigi.of no asume responsabilidad, ya que depende de normas externas de Nintendo. Esta condición se informa antes de comprar.</p>
+      </section>
+      <section>
+        <h3>4. Garantía técnica</h3>
+        <p>Clientes nuevos: <strong>3 meses</strong> de garantía. Clientes frecuentes: <strong>4 meses</strong>.</p>
+        <p>En packs de juegos, cubre fallos no causados por el usuario e incluye una reposición, una vez, o devolución parcial del pago según corresponda.</p>
+      </section>
+      <section>
+        <h3>5. Devoluciones y pagos</h3>
+        <p>Si no hay stock tras tu pago o la entrega supera un tiempo razonable, puedes solicitar reembolso total.</p>
+        <p>No hay devolución si el juego no te gusta, no funciona como esperabas, se omite un paso del instructivo o se realizan acciones que anulan la garantía.</p>
+      </section>
     </div>
-  </header>
-
-  <section class="encabezado">
-    <h1>¡Hey Digi está encendido!</h1>
-    <p class="subtexto">Desbloquea horas de diversión con los mejores juegos digitales para Nintendo Switch™.</p>
-    <p class="linea-extra">✨ Actualizado a diario – Packs limitados ✨</p>
+    <footer><button id="aceptarTerminos" type="button">Entendido</button></footer>
   </section>
-  
-  <!-- Mensaje flotante (opcional: si lo dejas, el JS no crea otro) -->
-  <div id="mensajeFiltro" class="mensaje-filtro"></div>
 
-  <!-- Catálogo (único) -->
-  <main id="catalogo" role="main"></main>
-
-  <footer>
-    <p>© 2024 Hey Digi. Todos los derechos reservados.</p>
-    <p>Hecho con ❤️ por Tilin.</p>
-  </footer>
+  <nav class="bottom-nav" aria-label="Navegacion principal">
+    <a class="nav-item active" href="#inicio" data-view-link="inicio" aria-current="page">
+      <span class="nav-icon"><img src="assets/icons/house.svg" alt=""></span>
+      <span>Inicio</span>
+    </a>
+    <a class="nav-item" href="#unitarios" data-view-link="unitarios">
+      <span class="nav-icon"><img src="assets/icons/gamepad-2.svg" alt=""></span>
+      <span>Unitarios</span>
+    </a>
+    <a class="nav-item" href="#packs" data-view-link="packs">
+      <span class="nav-icon"><img src="assets/icons/package-open.svg" alt=""></span>
+      <span>Packs</span>
+    </a>
+  </nav>
 </body>
 </html>
